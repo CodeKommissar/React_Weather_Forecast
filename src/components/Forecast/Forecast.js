@@ -1,8 +1,13 @@
 import React from "react";
+import { Row } from "react-bootstrap";
+
+import ForecastCard from "./ForecastCard/ForecastCard";
 
 const Forecast = (props) => {
     return (
-        <div>Displaying forecast</div>
+        <Row>
+            {props.forecast.map(day => <ForecastCard day={day} key={day.id} />)}
+        </Row>
     );
 }
 

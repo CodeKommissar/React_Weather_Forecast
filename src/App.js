@@ -22,7 +22,6 @@ class App extends Component {
       fetch(`https://cors.io/?https://www.metaweather.com/api/location/${this.state.city.woeid}`)
         .then(resp => resp.json())
         .then(json => {
-          console.log(json.consolidated_weather)
           this.setState({
               forecast: json,
           })
@@ -36,7 +35,7 @@ class App extends Component {
         <PageHeader>
           Search the Weather Forecast for 
           <strong>
-            { this.state.city ? " " + this.state.city.title : "..." }
+            { this.state.forecast ? " " + this.state.forecast.title : "..." }
           </strong>
         </PageHeader>
         <Grid>
@@ -45,9 +44,11 @@ class App extends Component {
               <SearchBar onCitySearch={this.handleCitySearch} />
             </Col>
           </Row>
-          <Row>
-            { this.state.forecast ? <Forecast /> : null } 
-          </Row>
+          <br/>
+          { this.state.forecast 
+            ? <Forecast forecast={this.state.forecast.consolidated_weather} /> 
+            : null 
+          } 
         </Grid>
       </div>
     );
