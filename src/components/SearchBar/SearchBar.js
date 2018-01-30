@@ -25,7 +25,6 @@ class SearchBar extends React.Component {
             minLength={2}
             placeholder="Search for a City..."
             onSearch={query => {
-              console.log(query)
               this.setState({ isLoading: true });
               fetch(`https://cors.io/?https://www.metaweather.com/api/location/search/?query=${query}`)
                 .then(resp => resp.json())
