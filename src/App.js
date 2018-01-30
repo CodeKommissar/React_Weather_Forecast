@@ -1,26 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import axios from "axios";
+import { PageHeader, Grid, Row, Col } from "react-bootstrap";
+
+import SearchBar from "./components/SearchBar/SearchBar";
+import Forecast from "./components/Forecast/Forecast";
 
 class App extends Component {
-  componentDidMount() {
-    axios.get("http://api.openweathermap.org/data/2.5/forecast?id=3646738&APPID=d9db55cd3cf00ab5c19d86aeb4d484c9")
-      .then(response => {
-        console.log(response);
-      })
+  state = {
+    city: null,
+    forecast: null
+  }
+
+  handleCitySearch = (city) => {
+    this.setState({ city: city }, () => {
+      this.handleForecastSearch();
+    });
+  }
+
+  handleForecastSearch = () => {
+    if (this.state.city) {
+      fetch(`https://cors.io/?https://www.metaweather.com/api/location/${this.state.city.woeid}`)
+        .then(resp => resp.json())
+        .then(json => {
+          console.log(json.consolidated_weather)
+          this.setState({
+              forecast: json,
+          })
+        });
+    }
   }
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <PageHeader>
+          Search the Weather Forecast for 
+          <strong>
+            { this.state.city ? " " + this.state.city.title : "..." }
+          </strong>
+        </PageHeader>
+        <Grid>
+          <Row>
+            <Col xs={12} md={8} mdOffset={2}>
+              <SearchBar onCitySearch={this.handleCitySearch} />
+            </Col>
+          </Row>
+          <Row>
+            { this.state.forecast ? <Forecast /> : null } 
+          </Row>
+        </Grid>
       </div>
     );
   }
