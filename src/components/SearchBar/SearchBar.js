@@ -7,26 +7,31 @@ const AsyncTypeahead = asyncContainer(Typeahead);
 class SearchBar extends React.Component {
   state = {
     isLoading: false,
+    submitFormOnEnter: true,
     options: [],
-    submitFormOnEnter: true
+    selected: ""
   }
 
   render() {
     return (
       <form onSubmit={(event) => {
           event.preventDefault();
-          this.props.onCitySearch(this.state.options[0])
+          this.props.onCitySearch(this.state.selected[0])
         }}
       >
         <InputGroup>
           <AsyncTypeahead
-            isLoading={this.state.isLoading}
             labelKey="title"
             minLength={2}
+            isLoading={this.state.isLoading}
             placeholder="Search for a City..."
+            onChange={(selected) => {
+              this.setState({selected});
+            }}
             onSearch={query => {
+              console.log(query)
               this.setState({ isLoading: true });
-              fetch(`https://cors.io/?https://www.metaweather.com/api/location/search/?query=${query}`)
+              fetch(`https://crossorigin.me/https://www.metaweather.com/api/location/search/?query=${query}`)
                 .then(resp => resp.json())
                 .then(json => {
                   this.setState({

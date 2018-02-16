@@ -12,14 +12,16 @@ class App extends Component {
   }
 
   handleCitySearch = (city) => {
-    this.setState({ city: city }, () => {
-      this.handleForecastSearch();
-    });
+    if(city) {
+      this.setState({ city: city }, () => {
+        this.handleForecastSearch();
+      });
+    }
   }
 
   handleForecastSearch = () => {
     if (this.state.city) {
-      fetch(`https://cors.io/?https://www.metaweather.com/api/location/${this.state.city.woeid}`)
+      fetch(`https://crossorigin.me/https://www.metaweather.com/api/location/${this.state.city.woeid}`)
         .then(resp => resp.json())
         .then(json => {
           this.setState({
